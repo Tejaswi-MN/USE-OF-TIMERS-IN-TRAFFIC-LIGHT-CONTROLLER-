@@ -246,3 +246,74 @@ module traffic_light_controller(
  end
 
 endmodule
+
+
+Test Bench :
+
+`timescale 1ns / 1ps
+
+module tb_traffic_light_controller;
+
+ reg clk; // Clock signal
+
+ reg rst_n; // Reset signal (active low)
+
+ wire [2:0] n_lights; // North lights output
+
+ wire [2:0] s_lights; // South lights output
+
+ wire [2:0] e_lights; // East lights output
+
+ wire [2:0] w_lights; // West lights output
+
+ traffic_light_controller uut (
+
+ .n_lights(n_lights),
+
+ .s_lights(s_lights
+ .e_lights(e_lights),
+
+ .w_lights(w_lights),
+
+ .clk(clk),
+
+ .rst_n(rst_n)
+
+ );
+
+ initial begin
+
+ clk = 0;
+
+ forever #5 clk = ~clk; // Toggle clock every 5 ns
+
+ end
+
+ initial begin
+
+ rst_n = 0; // Assert reset
+
+ #10; // Wait for 10 ns
+
+ rst_n = 1; // Deassert reset
+
+ end
+
+ initial begin
+
+ $monitor("Time: %0t | n_lights: %b | s_lights: %b | e_lights: %b | w_lights: %b", 
+
+ $time, n_lights, s_lights, e_lights, w_lights);
+
+ end
+
+ initial begin
+
+ #1000; // Run for 1000 ns
+
+ $finish; // End the simulation
+
+ end
+
+endmodule
+
